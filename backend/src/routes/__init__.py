@@ -1,7 +1,6 @@
-from flask import Flask, jsonify
-from database import db_cursor
-
-app = Flask(__name__)
+from src import connection
+from flask import jsonify
+from src import app
 
 def format_products(data_list: list):
 
@@ -40,16 +39,16 @@ def format_reviews(data_list: list):
 
 @app.route('/', methods=['GET'])
 def get_products():
-    db_cursor.execute('SELECT * FROM products')
-    data = db_cursor.fetchall()
+    connection.db_cursor.execute('SELECT * FROM products')
+    data = connection.db_cursor.fetchall()
     products = format_products(data)
     return products
    
 
 @app.route('/products/<string:category>', methods=['GET'])
 def get_products_by_category(category: str):
-    db_cursor.execute(f'SELECT * FROM products WHERE category = "{category}"')
-    data = db_cursor.fetchall()
+    connection.db_cursor.execute(f'SELECT * FROM products WHERE category = "{category}"')
+    data = connection.db_cursor.fetchall()
     products_by_category = format_products(data)
 
     if products_by_category:
@@ -59,15 +58,15 @@ def get_products_by_category(category: str):
 
 @app.route('/reviews', methods=['GET'])
 def get_reviews():
-    db_cursor.execute('SELECT * FROM reviews')
-    data = db_cursor.fetchall()
+    connection.db_cursor.execute('SELECT * FROM reviews')
+    data = connection.db_cursor.fetchall()
     products = format_reviews(data)
     return products
 
 @app.route('/products/<int:id>', methods=['GET'])
 def get_product_by_id(id: int):
-    db_cursor.execute(f'SELECT * FROM products WHERE id = {id}')
-    data = db_cursor.fetchall()
+    connection.db_cursor.execute(f'SELECT * FROM products WHERE id = {id}')
+    data = connection.db_cursor.fetchall()
     product_by_id = format_reviews(data)
 
     if product_by_id:
@@ -77,14 +76,11 @@ def get_product_by_id(id: int):
 
 @app.route('/reviews/<product_id>', methods=['GET'])
 def get_reviews_by_product_id(product_id: int):
-    db_cursor.execute(f'SELECT * FROM reviews WHERE product_id = {product_id}')
-    data = db_cursor.fetchall()
+    connection.db_cursor.execute(f'SELECT * FROM reviews WHERE product_id = {product_id}')
+    data = connection.db_cursor.fetchall()
     reviews_by_product_id = format_reviews(data)
 
     if reviews_by_product_id:
         return reviews_by_product_id
     else:
         return jsonify({'erro': "This product doesn't have reviews yet"}), 404
-
-app.run()
-

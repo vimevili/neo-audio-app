@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\vinic\OneDrive - Fatec Centro Paula Souza\Pessoal\Programação\AudioApp\backend\venv
+set VIRTUAL_ENV=C:\Users\vinic\OneDrive\Pessoal\Programação\AudioApp\backend\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
